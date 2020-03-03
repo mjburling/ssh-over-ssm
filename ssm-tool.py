@@ -65,7 +65,7 @@ def ssm_list_instances(filter):
         while True:
             next_token = ssminstances.get('NextToken')
             if not next_token: break
-            ssminstances = ssm.describe_instance_information(MaxResults=50, Filters=[filters], NextToken=next_token)
+            ssminstances = ssm.describe_instance_information(MaxResults=50, Filters=[filter], NextToken=next_token)
             ssmi.extend(ssminstances['InstanceInformationList'])
         return ssmi
     except Exception as e:
