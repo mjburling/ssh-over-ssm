@@ -9,7 +9,7 @@ EOF
 fi
 
 [[ "$#" -ne 2 ]] && printf "  Usage: ${0} <instance-id|instance-name> <ssh user>\n" && exit 1
-[[ -z "${AWS_PROFILE:-}" ]] && printf "  AWS_PROFILE not set!\n" && exit 1
+[[ -z "${AWS_PROFILE:-$AWS_VAULT}" ]] && printf "  AWS_PROFILE or AWS_VAULT not set!\n" && exit 1
 
 if [[ "$(ps -o comm= -p $PPID)" != "ssh" ]]; then
   ssh -o IdentityFile="~/.ssh/ssm-ssh-tmp" -o ProxyCommand="${0} ${1} ${2}" ${2}@${1}

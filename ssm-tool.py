@@ -19,7 +19,7 @@ def get_profiles():
 def process_args():
     parser = argparse.ArgumentParser(description='ssh-ssm toolkit')
     group = parser.add_mutually_exclusive_group()
-    parser.add_argument('--profile', dest='profile', action='store', choices=get_profiles(), default=os.getenv('AWS_PROFILE') or 'default', metavar='', help='AWS profile. default is \'default\'')
+    parser.add_argument('--profile', dest='profile', action='store', choices=get_profiles(), default=os.getenv('AWS_VAULT') or 'default', metavar='', help='AWS profile. default is \'default\'')
     group.add_argument('-u', '--update', action='store_true', help='update ssm-agent on returned instances')
     group.add_argument('-i', '--iid', dest='iidonly', action='store_true', help='return only instance ids')
     parser.add_argument('-x', '--linux', dest='platforms', action='append_const', const='Linux', help='filter only linux machines')
@@ -84,8 +84,11 @@ def build_table(ssmi, filtered):
 
 
 args = process_args()
- 
-session = Session(profile_name=args.profile)
+
+if os.getenv('AWS_PROFILE'):
+    session = Session(profile_name=args.profile)
+else:
+    session = Session()
 ec2 = session.client('ec2')
 ssm = session.client('ssm')
 
